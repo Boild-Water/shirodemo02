@@ -51,12 +51,16 @@ public class ShiroController {
         Subject currentUser = SecurityUtils.getSubject();
 
         // 测试当前的用户是否已经被认证. 即是否已经登录.
-        // 调动 Subject 的 isAuthenticated()
+        // 调用 Subject 的 isAuthenticated()
         if (!currentUser.isAuthenticated()) {
             // 把用户名和密码封装为 UsernamePasswordToken 对象
             UsernamePasswordToken token = new UsernamePasswordToken(username, password);
 
-            // rememberme
+            /**
+             * 记住我 这里统一设置为true
+             * 实际开发上，login方法应该要接收一个前端页面传过来的 checkbox(remember me)有没有被勾选
+             * 进行判断是否记住我。
+             */
             token.setRememberMe(true);
             try {
                 // 执行登录.(这个token实际上被传入到了com.boildwater.realms.ShiroRealm.doGetAuthenticationInfo(AuthenticationToken token) )

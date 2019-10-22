@@ -33,6 +33,9 @@
             </list>
         </property>
 
+        <!--设置记住我 cookie的作用时间 单位为秒-->
+        <property name="rememberMeManager.cookie.maxAge" value="10"></property>
+
     </bean>
 
     <!--2.配置cacheManager-->
