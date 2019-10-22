@@ -20,7 +20,10 @@
     <!--1.配置SecurityManager-->
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
         <property name="cacheManager" ref="cacheManager"></property>
-        <property name="realm" ref="jdbcRealm"></property>
+        <!--此处不能再配置下面这个Realm了-->
+        <!--<property name="realm" ref="jdbcRealm"></property>-->
+        <!--需要配置一个认证器了-->
+        <property name="authenticator" ref="authenticator"></property>
     </bean>
 
     <!--2.配置cacheManager-->
@@ -29,7 +32,27 @@
         <property name="cacheManagerConfigFile" value="classpath:ehcache.xml"></property>
     </bean>
 
-    <!--3.配置realm 配置一个实现了Realm接口的一个bean-->
+    <!--多个Realm 需要配置一个认证器-->
+    <bean class="org.apache.shiro.authc.pam.ModularRealmAuthenticator" id="authenticator">
+        <property name="realms">
+            <list>
+                <ref bean="jdbcRealm"/>
+                <ref bean="secondRealm"/>
+            </list>
+        </property>
+        <!--指定认证策略-->
+        <property name="authenticationStrategy">
+            <!--
+                1.AllSuccessfulStrategy 必须所有的Realm都通过才算认证成功
+                2.AtLeastOneSuccessfulStrategy 只要有一个Realm认证通过，就算认证成功 (也是默认的配置)
+                3.FirstSuccessfulStrategy 只要有一个Realm认证成功即可，
+                    只返回第一个Realm身份验证成功的认证信息，其他忽略
+            -->
+            <bean class="org.apache.shiro.authc.pam.AtLeastOneSuccessfulStrategy"></bean>
+        </property>
+    </bean>
+
+    <!--3.配置多个realm 配置第一个自定义的Realm-->
     <bean id="jdbcRealm" class="com.boildwater.realms.ShiroRealm">
 
         <!--指定凭证匹配器，自动的将从前台传入的密码转为经过MD5加密的数据-->
@@ -41,6 +64,17 @@
             </bean>
         </property>
 
+    </bean>
+    <!--配置第二个Realm-->
+    <bean id="secondRealm" class="com.boildwater.realms.SecondRealm">
+        <!--指定凭证匹配器，自动的将从前台传入的密码转为经过SHA1加密的数据-->
+        <property name="credentialsMatcher">
+            <bean class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+                <property name="hashAlgorithmName" value="SHA1"></property>
+                <!--虽然SHA1算法是不可逆的，这里还可以指定加密的次数，提高SHA1加密安全性，这里选择将数据加密后再加密-->
+                <property name="hashIterations" value="1024"></property>
+            </bean>
+        </property>
     </bean>
 
     <!--4.配置LifecycleBeanPostProcessor 可以自动的来调用配置在Spring IOC容器中shiro bean的生命周期方法-->

@@ -9,12 +9,12 @@ import org.apache.shiro.util.ByteSource;
  * @author jinfei
  * @create 2019-10-22 9:26
  */
-public class ShiroRealm extends AuthenticatingRealm {
+public class SecondRealm extends AuthenticatingRealm {
 
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
 
-        System.out.println("my firstRealm...");
+        System.out.println("my secondRealm...");
 
         //1.把authenticationToken转化为UsernamePasswordToken
         UsernamePasswordToken usernamePasswordToken = (UsernamePasswordToken) authenticationToken;
@@ -68,7 +68,7 @@ public class ShiroRealm extends AuthenticatingRealm {
     }
 
     /**
-     * 测试MD5加密
+     * 测试SHA1加密
      */
     public static void main(String[] args) {
         Object credentials ="123456";//加密前明文密码
@@ -80,7 +80,7 @@ public class ShiroRealm extends AuthenticatingRealm {
     }
 
     /**
-     * 没有指定盐值的MD5加密
+     * 没有指定盐值的SHA1加密
      */
     public static Object method1(Object credentials){
 
@@ -94,14 +94,11 @@ public class ShiroRealm extends AuthenticatingRealm {
     }
 
     /**
-     * 指定盐值的MD5加密
-     *  存在的问题，发现如果相同的密码经过加密后，生成的明文是相同的，这就存在一个问题
-     *  如果不同的用户(不同的username)即使密码相同，经过加密后也应该保证明文不一样，
-     *  这样的安全性是不是更高呢？
+     * 指定盐值的SHA1加密
      */
     public static Object method2(Object credentials,Object salt){
 
-        String hashAlgorithmName = "MD5";//加密算法
+        String hashAlgorithmName = "SHA1";//加密算法
         Object credentials1 = credentials;//加密前明文密码
         Object salt1 = salt;//盐值
         int hashIterations = 1024;//加密次数
