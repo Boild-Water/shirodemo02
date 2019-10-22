@@ -1,9 +1,11 @@
 package com.boildwater.controller;
 
+import com.boildwater.service.ShiroService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -13,6 +15,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 public class ShiroController {
+
+    @Autowired
+    private ShiroService shiroService;
+
+    @RequestMapping("testShiroAnnotation")
+    public String testShiroAnnotation(){
+        shiroService.testMethod();
+        return "redirect:/list.jsp";
+    }
 
     @RequestMapping("/shiroLogin")
     public String login(String username,String password){

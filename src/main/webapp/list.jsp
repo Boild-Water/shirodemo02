@@ -17,6 +17,8 @@
 
     Welcome:<shiro:principal></shiro:principal><br><br>
 
+    <a href="testShiroAnnotation">Test ShiroAnnotation</a><br><br>
+
     <%--如果登录的用户含有admin角色--%>
     <shiro:hasRole name="admin">
         <a href="admin.jsp">admin</a><br><br>
