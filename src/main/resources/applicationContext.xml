@@ -112,7 +112,7 @@
             2) authc 必须认证(登陆)之后才能访问的页面
             3) logout 表示登出的请求
             4) roles 角色过滤器
-        -->
+
         <property name="filterChainDefinitions">
             <value>
                 /login.jsp = anon
@@ -125,8 +125,21 @@
                 /** = authc
             </value>
         </property>
+        -->
+
+        <!--上面将资源权限管理配置在了文件中，那么如何从数据库中获取资源权限信息呢-->
+        <property name="filterChainDefinitionMap" ref="filterChainDefinitionMap"></property>
 
     </bean>
+
+    <!--配置一个bean，这个bean实际上是个Map，通过普通工厂的方式-->
+    <bean id="filterChainDefinitionMapBuilder"
+          class="com.boildwater.factory.FilterChainDefinitionMapBuilder">
+    </bean>
+    <bean id="filterChainDefinitionMap" factory-method="buildFilterChainDefinitionMap"
+          factory-bean="filterChainDefinitionMapBuilder">
+    </bean>
+
 
 
 </beans>
