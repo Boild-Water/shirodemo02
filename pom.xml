@@ -49,6 +49,23 @@
             <artifactId>slf4j-log4j12</artifactId>
             <version>1.6.1</version>
         </dependency>
+
+        <!--引入jsp、servlet依赖-->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.5</version>
+            <!-- 因为tomcat环境中已经包含javax.servlet与javax.servlet.jsp -->
+            <!-- 此处如果再将scope设置为compile类型(默认)，会将该jar包部署到tomcat服务器中，与tomcat jar包冲突，出现莫名错误 -->
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet.jsp</groupId>
+            <artifactId>jsp-api</artifactId>
+            <version>2.0</version>
+            <scope>provided</scope>
+        </dependency>
+
     </dependencies>
 
     <build>

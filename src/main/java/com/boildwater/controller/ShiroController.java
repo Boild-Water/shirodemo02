@@ -2,12 +2,15 @@ package com.boildwater.controller;
 
 import com.boildwater.service.ShiroService;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.*;
-import org.apache.shiro.session.Session;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 /**
  * @author jinfei
@@ -18,6 +21,22 @@ public class ShiroController {
 
     @Autowired
     private ShiroService shiroService;
+
+    /**
+     * 演示如何利用shiro在service层获取到session信息
+     *  有时候这个功能还是很好用的
+     */
+    @RequestMapping("/shiroSession")
+    public String testShiroSerssion(HttpServletRequest request){
+
+        HttpSession session = request.getSession();
+        session.setAttribute("hello","shiro");
+        System.out.println(session);
+
+        shiroService.testShiroSession();
+
+        return "redirect:/list.jsp";
+    }
 
     @RequestMapping("testShiroAnnotation")
     public String testShiroAnnotation(){

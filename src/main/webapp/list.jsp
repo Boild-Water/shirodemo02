@@ -15,6 +15,8 @@
 <body>
     <h1>List</h1>
 
+    <a href="shiroSession">Test ShiroSession</a><br><br>
+
     Welcome:<shiro:principal></shiro:principal><br><br>
 
     <a href="testShiroAnnotation">Test ShiroAnnotation</a><br><br>
