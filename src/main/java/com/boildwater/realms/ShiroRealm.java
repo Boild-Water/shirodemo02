@@ -1,16 +1,44 @@
 package com.boildwater.realms;
 
 import org.apache.shiro.authc.*;
+import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.realm.AuthenticatingRealm;
+import org.apache.shiro.realm.AuthorizingRealm;
+import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author jinfei
  * @create 2019-10-22 9:26
  */
-public class ShiroRealm extends AuthenticatingRealm {
+public class ShiroRealm extends AuthorizingRealm {
 
+    //授权的方法(此时，用户已经经过认证，登陆成功。)
+    @Override
+    protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
+
+        //1.从PrincipalCollection中获取登陆用户的信息
+        Object principal = principalCollection.getPrimaryPrincipal();
+
+        //2.利用登陆的用户的信息来获取当前用户的角色或者权限(可能需要查询数据库)
+        Set<String> roles = new HashSet<>();
+        roles.add("user");
+        if ("admin".equals(principal)){
+            roles.add("admin");
+        }
+
+        //3.创建SimpleAuthorizationInfo对象，并设置其roles属性，返回
+        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo(roles);
+
+        return info;
+    }
+
+    //认证的方法
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
 
@@ -109,6 +137,5 @@ public class ShiroRealm extends AuthenticatingRealm {
         Object result = new SimpleHash(hashAlgorithmName,credentials1,salt1,hashIterations);
         return result;
     }
-
 
 }

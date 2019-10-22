@@ -1,0 +1,8 @@
+1.认证需要继承AuthenticatingRealm，
+    实现doGetAuthenticationInfo(AuthenticationToken authenticationToken)方法
+
+2.授权需要继承AuthenticationRealm的一个子类AuthorizingRealm
+    实现doGetAuthorizationInfo(PrincipalCollection var1);方法
+    需要注意的是：AuthenticationRealm是AuthorizingRealm的一个子类，但是也没有实现
+    doGetAuthenticationInfo(AuthenticationToken authenticationToken)，所以授权操作时，只需要继承
+    AuthenticationRealm即可，实现认证和授权的两个抽象方法即可

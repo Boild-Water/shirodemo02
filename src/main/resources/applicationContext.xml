@@ -24,6 +24,15 @@
         <!--<property name="realm" ref="jdbcRealm"></property>-->
         <!--需要配置一个认证器了-->
         <property name="authenticator" ref="authenticator"></property>
+
+        <!--做授权认证，还需要将Realm配置到这来-->
+        <property name="realms">
+            <list>
+                <ref bean="jdbcRealm"></ref>
+                <ref bean="secondRealm"></ref>
+            </list>
+        </property>
+
     </bean>
 
     <!--2.配置cacheManager-->
@@ -90,7 +99,9 @@
     <!--6.配置ShiroFilter id需要与在web.xml中配置的一致-->
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
         <property name="securityManager" ref="securityManager"></property>
+        <!--认证没有成功跳转的页面-->
         <property name="loginUrl" value="/login.jsp"></property>
+        <!--认证成功跳转的页面-->
         <property name="successUrl" value="/list.jsp"></property>
         <!--没有权限的页面-->
         <property name="unauthorizedUrl" value="/unauthorized.jsp"></property>
@@ -100,12 +111,17 @@
             1) anon 可以被匿名访问的页面
             2) authc 必须认证(登陆)之后才能访问的页面
             3) logout 表示登出的请求
+            4) roles 角色过滤器
         -->
         <property name="filterChainDefinitions">
             <value>
                 /login.jsp = anon
                 /shiroLogin = anon
                 /shiroLogout = logout
+
+                /user.jsp = roles[user]
+                /admin.jsp = roles[admin]
+
                 /** = authc
             </value>
         </property>

@@ -11,11 +11,6 @@
     <title>Title</title>
 </head>
 <body>
-    <h1>List</h1>
-    <a href="shiroLogout">注销</a><br><br>
-
-
-    <a href="admin.jsp">admin</a><br><br>
-    <a href="user.jsp">user</a><br><br>
+    <h1>admin</h1>
 </body>
 </html>
